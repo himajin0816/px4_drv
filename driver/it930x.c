@@ -748,22 +748,6 @@ int it930x_init_warm(struct it930x_bridge *it930x)
 		return -EINVAL;
 	}
 
-	ret = it930x_write_reg(it930x, 0x4976, 0);
-	if (ret)
-		return ret;
-
-	ret = it930x_write_reg(it930x, 0x4bfb, 0);
-	if (ret)
-		return ret;
-
-	ret = it930x_write_reg(it930x, 0x4978, 0);
-	if (ret)
-		return ret;
-
-	ret = it930x_write_reg(it930x, 0x4977, 0);
-	if (ret)
-		return ret;
-
 	/* ignore sync byte: no */
 	ret = it930x_write_reg(it930x, 0xda1a, 0);
 	if (ret)
@@ -791,12 +775,6 @@ int it930x_init_warm(struct it930x_bridge *it930x)
 			ret);
 		return ret;
 	}
-
-	/* power config ? */
-
-	ret = it930x_write_reg(it930x, 0xd833, 1);
-	if (ret)
-		return ret;
 
 	ret = it930x_write_reg(it930x, 0xd830, 0);
 	if (ret)
