@@ -10,6 +10,7 @@
 
 #include <linux/delay.h>
 
+static int __cxd2858er_enter_power_save(struct cxd2858er_tuner *tuner);
 static int __cxd2858er_stop_t(struct cxd2858er_tuner *tuner);
 static int __cxd2858er_stop_s(struct cxd2858er_tuner *tuner);
 
@@ -529,6 +530,21 @@ exit:
 	return ret;
 }
 
+static int __cxd2858er_enter_power_save(struct cxd2858er_tuner *tuner)
+{
+	int ret = 0;
+
+	ret = __cxd2858er_write_reg(tuner, 0x88, 0x0);
+	if (ret)
+		return ret;
+
+	ret = __cxd2858er_write_reg(tuner, 0x87, 0xc0);
+	if (ret)
+		return ret;
+
+	return 0;
+}
+
 static int __cxd2858er_stop_t(struct cxd2858er_tuner *tuner)
 {
 	int ret = 0;
@@ -560,6 +576,10 @@ static int __cxd2858er_stop_t(struct cxd2858er_tuner *tuner)
 	ret = __cxd2858er_write_reg(tuner, 0x87, 0xc0);
 	if (ret)
 		return ret;
+
+	ret = __cxd2858er_enter_power_save(tuner);
+        if (ret)
+                return ret;
 
 	tuner->system = CXD2858ER_UNSPECIFIED_SYSTEM;
 	return 0;
@@ -600,6 +620,10 @@ static int __cxd2858er_stop_s(struct cxd2858er_tuner *tuner)
 	ret = __cxd2858er_write_reg(tuner, 0x04, 0xc0);
 	if (ret)
 		return ret;
+
+        ret = __cxd2858er_enter_power_save(tuner);
+        if (ret)
+                return ret;
 
 	tuner->system = CXD2858ER_UNSPECIFIED_SYSTEM;
 	return 0;
